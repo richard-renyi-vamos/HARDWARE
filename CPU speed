@@ -1,0 +1,9 @@
+import psutil
+
+def get_processor_speed():
+    cpu_freq = psutil.cpu_freq()
+    return f"Current processor speed: {cpu_freq.current:.2f} MHz"
+
+print(get_processor_speed())
+
+# CREATED WITH THE HELP OF OPEN-AI CHAT GPT: https://chat.openai.com/chat
