@@ -1,0 +1,32 @@
+import psutil
+
+def get_storage_devices():
+    partitions = psutil.disk_partitions(all=True)
+    storage_devices = []
+
+    for partition in partitions:
+        if partition.mountpoint == '/':
+            # Skip the root partition
+            continue
+
+        device = {
+            'device': partition.device,
+            'mountpoint': partition.mountpoint,
+            'size': psutil.disk_usage(partition.mountpoint).total
+        }
+        storage_devices.append(device)
+
+    return storage_devices
+
+def main():
+    storage_devices = get_storage_devices()
+
+    for device in storage_devices:
+        print(f"Device: {device['device']}")
+        print(f"Mount Point: {device['mountpoint']}")
+        print(f"Size: {device['size']} bytes\n")
+
+if __name__ == '__main__':
+    main()
+
+# CREATED WITH THE HELP OF OPEN-AI CHAT GPT: https://chat.openai.com/chat
