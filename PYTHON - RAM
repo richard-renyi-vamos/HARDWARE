@@ -1,0 +1,25 @@
+import psutil
+import matplotlib.pyplot as plt
+
+def visualize_ram_usage():
+    # Get RAM memory information
+    mem = psutil.virtual_memory()
+    used = mem.used / (1024 ** 3)  # Convert to GB
+    available = mem.available / (1024 ** 3)  # Convert to GB
+
+    # Create a pie chart
+    labels = ['Used', 'Available']
+    sizes = [used, available]
+    colors = ['#ff9999', '#66b3ff']
+    explode = (0.1, 0)  # Explode the "Used" slice
+
+    plt.pie(sizes, explode=explode, labels=labels, colors=colors,
+            autopct='%1.1f%%', startangle=90)
+    plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
+    plt.title('RAM Memory Usage')
+    plt.show()
+
+# Call the function to visualize RAM memory usage
+visualize_ram_usage()
+
+# CREATED WITH THE HELP OF OPEN-AI CHAT GPT: https://chat.openai.com/chat
