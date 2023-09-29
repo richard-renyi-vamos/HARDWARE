@@ -1,0 +1,58 @@
+import sys
+import subprocess
+import re
+import time
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel
+from PyQt5.QtCore import QTimer
+
+class GPUStatsApp(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle("GPU Statistics")
+        self.setGeometry(100, 100, 400, 200)
+
+        self.layout = QVBoxLayout()
+
+        self.temperature_label = QLabel("Temperature: N/A")
+        self.workload_label = QLabel("Workload: N/A")
+
+        self.layout.addWidget(self.temperature_label)
+        self.layout.addWidget(self.workload_label)
+
+        self.setLayout(self.layout)
+
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.update_stats)
+        self.timer.start(1000)  # Update every 1 second
+
+    def get_gpu_stats(self):
+        try:
+            result = subprocess.check_output(["nvidia-smi", "--query-gpu=temperature.gpu,utilization.gpu", "--format=csv,noheader,nounits"])
+            result = result.decode("utf-8").strip().split(',')
+            temperature, workload = result
+            return int(temperature), int(workload)
+        except (subprocess.CalledProcessError, ValueError):
+            return None
+
+    def update_stats(self):
+        stats = self.get_gpu_stats()
+        if stats:
+            temperature, workload = stats
+            self.temperature_label.setText(f"Temperature: {temperature}°C")
+            self.workload_label.setText(f"Workload: {workload}%")
+        else:
+            self.temperature_label.setText("Temperature: N/A")
+            self.workload_label.setText("Workload: N/A")
+
+def main():
+    app = QApplication(sys.argv)
+    window = GPUStatsApp()
+    window.show()
+    sys.exit(app.exec_())
+
+if __name__ == "__main__":
+    main()
+
+
+# CREATED WITH THE HELP OF OPEN-AI CHAT GPT: https://chat.openai.com/chat
