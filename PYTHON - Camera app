@@ -52,3 +52,6 @@ panel.after(10, update)
 root.mainloop()
 cap.release()
 cv2.destroyAllWindows()
+
+
+# CREATED WITH THE HELP OF OPEN-AI CHAT GPT: https://chat.openai.com/chat
